@@ -2,47 +2,54 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
+        final int YEAR = 2021;
+        final String ROOT = "resources";
         Scanner scanner = new Scanner(System.in);
-        ArrayList<MonthlyReport> monthsData = new ArrayList<>();
+        ArrayList<MonthlyReport> monthsData = null;
         MonthNames monthNames = new MonthNames();
         YearlyReport yearData = null;
-        boolean gotMonthData = false;
-        boolean gotYearData = false;
         while (true) {
             System.out.println("1. Считать все месячные отчёты");
             System.out.println("2. Считать годовой отчёт");
             System.out.println("3. Сверить отчёты");
             System.out.println("4. Вывести информацию о всех месячных отчётах");
             System.out.println("5. Вывести информацию о годовом отчёте");
+            System.out.println("0. Выход");
             int userInput = scanner.nextInt();
             if (userInput == 1) {
+                monthsData = new ArrayList<>();
                 for (int i = 1; i < 4; i++) {
-                    String data = readFileContentsOrNull("resources/m.20210" + i + ".csv");
-                    if (!(data == null)) {
-                        MonthlyReport s = new MonthlyReport(data);
-                        monthsData.add(s);
+                    List<String> data;
+                    try {
+                        data = Files.readAllLines(Path.of(ROOT, "m.20210" + i + ".csv"));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
+                    MonthlyReport s = new MonthlyReport(data);
+                        monthsData.add(s);
                 }
-                gotMonthData = true;
             }
             else if (userInput == 2) {
-                String data = readFileContentsOrNull("resources/y.2021.csv");
-                if (!(data == null)) {
-                    yearData = new YearlyReport(data);
+                List<String> data;
+                try {
+                    data = Files.readAllLines(Path.of(ROOT,"y.2021.csv"));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-                gotYearData = true;
+                yearData = new YearlyReport(data);
             }
             else if (userInput == 3) {
-                if (gotMonthData && gotYearData && yearData != null) {
+                if (yearData != null && monthsData != null && !monthsData.isEmpty()) {
                     boolean isEqual = false;
                     int monthIncome;
                     int monthExpense;
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < monthsData.size(); i++) {
                         monthIncome = monthsData.get(i).getMaxIncome();
                         monthExpense = monthsData.get(i).getMaxExpense();
                         if (monthIncome == yearData.getMonthIncome(i*2) && monthExpense == yearData.getMonthExpense(i*2)) {
@@ -50,7 +57,6 @@ public class Main {
                         } else {
                             isEqual = false;
                             System.out.println("Месяц, в котором обнаружено несоответствие - " + monthNames.monthNames.get(i));
-                            break;
                         }
                     }
                     if (isEqual){
@@ -62,7 +68,7 @@ public class Main {
                 }
             }
             else if (userInput == 4) {
-                if (gotMonthData && gotYearData) {
+                if (monthsData != null && !monthsData.isEmpty()) {
                     for (int i = 0; i < 3; i++) {
                         System.out.println(monthNames.monthNames.get(i));
                         System.out.println("Самый прибыльный товар - " + monthsData.get(i).getValueItem() + " сумма - " + monthsData.get(i).costValueItem);
@@ -74,8 +80,8 @@ public class Main {
                 }
             }
             else if (userInput == 5) {
-                if (gotMonthData && gotYearData) {
-                    System.out.println("Рассматриваемый год - 2021");
+                if (monthsData != null && !monthsData.isEmpty()) {
+                    System.out.println("Рассматриваемый год - " + YEAR);
                     for (int i = 0; i < 3; i++) {
                         int profit = monthsData.get(i).getMaxIncome() - monthsData.get(i).getMaxExpense();
                         System.out.println("Прибыль за " + monthNames.monthNames.get(i) + " " + profit);
@@ -96,7 +102,7 @@ public class Main {
                     System.out.println("Средний доход за все месяцы в году - " + midExpense);
                 }
                 else {
-                    System.out.println("Отчеты не считаны");
+                    System.out.println("Отчет не считан");
                 }
             }
             else if (userInput == 0) {
@@ -109,16 +115,4 @@ public class Main {
         }
 
     }
-    private static String readFileContentsOrNull(String path)
-    {
-        try {
-            return Files.readString(Path.of(path));
-        } catch (IOException e) {
-            System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл не находится в нужной директории.");
-            return null;
         }
-    }
-        }
-
-
-
