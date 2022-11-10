@@ -17,9 +17,4 @@ public class MonthNames {
         monthNames.put(10, "Ноябрь");
         monthNames.put(11, "Декабрь");
     }
-
-
-
-
-
 }

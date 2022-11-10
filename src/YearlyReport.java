@@ -1,12 +1,11 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class YearlyReport {
-
     ArrayList<YearLine> items = new ArrayList<> ();
-    public YearlyReport(String fileContents) {
-        String [] lines = fileContents.split("\\r?\\n");
-        for (int i = 1; i < lines.length; i++) {
-            String[] lineContents = lines[i].split(",");
+    public YearlyReport(List<String> lines) {
+        for (int i = 1; i < lines.size(); i++) {
+            String[] lineContents = lines.get(i).split(",");
             int month = Integer.parseInt(lineContents[0]);
             int amount = Integer.parseInt(lineContents[1]);
             boolean isExpense = Boolean.parseBoolean(lineContents[2]);

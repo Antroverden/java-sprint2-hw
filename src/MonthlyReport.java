@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class MonthlyReport {
     String valueItem;
@@ -7,10 +8,9 @@ public class MonthlyReport {
     ArrayList<MonthLine> items = new ArrayList<>();
 
 
-    MonthlyReport(String fileContents) {
-        String[] lines = fileContents.split("\\r?\\n");
-        for (int i = 1; i < lines.length; i++) {
-            String[] lineContents = lines[i].split(",");
+    MonthlyReport(List<String> lines) {
+        for (int i = 1; i < lines.size(); i++) {
+            String[] lineContents = lines.get(i).split(",");
             String itemName = lineContents[0];
             boolean isExpense = Boolean.parseBoolean(lineContents[1]);
             int quantity = Integer.parseInt(lineContents[2]);
@@ -19,7 +19,6 @@ public class MonthlyReport {
             items.add(line);
         }
     }
-
     String getValueItem() {
         int max = 0;
         for (MonthLine item : items) {
@@ -27,15 +26,13 @@ public class MonthlyReport {
                 int itemCost = item.quantity * item.sumOfOne;
                 if (max < itemCost) {
                     max = itemCost;
-                    this.valueItem = item.itemName;
+                    valueItem = item.itemName;
                 }
             }
-
         }
-        this.costValueItem = max;
+        costValueItem = max;
         return valueItem;
     }
-
     String getMostExpense() {
         int max = 0;
         for (MonthLine item : items) {
@@ -43,15 +40,13 @@ public class MonthlyReport {
                 int itemCost = item.quantity * item.sumOfOne;
                 if (max < itemCost) {
                     max = itemCost;
-                    this.valueItem = item.itemName;
+                    valueItem = item.itemName;
                 }
             }
-
         }
-        this.expenseItem = max;
+        expenseItem = max;
         return valueItem;
     }
-
     int getMaxExpense() {
         int itemExpense = 0;
         for (MonthLine item : items) {
@@ -61,7 +56,6 @@ public class MonthlyReport {
         }
         return itemExpense;
     }
-
     int getMaxIncome() {
         int itemIncome = 0;
         for (MonthLine item : items) {
@@ -72,8 +66,3 @@ public class MonthlyReport {
         return itemIncome;
     }
 }
-
-
-
-
-
