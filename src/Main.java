@@ -46,20 +46,18 @@ public class Main {
             }
             else if (userInput == 3) {
                 if (yearData != null && monthsData != null && !monthsData.isEmpty()) {
-                    boolean isEqual = false;
+                    int notEqual = 0;
                     int monthIncome;
                     int monthExpense;
                     for (int i = 0; i < monthsData.size(); i++) {
                         monthIncome = monthsData.get(i).getMaxIncome();
                         monthExpense = monthsData.get(i).getMaxExpense();
-                        if (monthIncome == yearData.getMonthIncome(i*2) && monthExpense == yearData.getMonthExpense(i*2)) {
-                            isEqual = true;
-                        } else {
-                            isEqual = false;
+                        if (!(monthIncome == yearData.getMonthIncome(i*2) && monthExpense == yearData.getMonthExpense(i*2))) {
+                            notEqual++;
                             System.out.println("Месяц, в котором обнаружено несоответствие - " + monthNames.monthNames.get(i));
                         }
                     }
-                    if (isEqual){
+                    if (notEqual == 0) {
                         System.out.println("Операция успешно завершена.");
                     }
                 }
@@ -80,23 +78,23 @@ public class Main {
                 }
             }
             else if (userInput == 5) {
-                if (monthsData != null && !monthsData.isEmpty()) {
+                if (yearData != null) {
                     System.out.println("Рассматриваемый год - " + YEAR);
-                    for (int i = 0; i < monthsData.size(); i++) {
-                        int profit = monthsData.get(i).getMaxIncome() - monthsData.get(i).getMaxExpense();
+                    for (int i = 0; i < yearData.items.size()/2; i++) {
+                        int profit = yearData.getMonthIncome(i*2) - yearData.getMonthExpense(i*2);
                         System.out.println("Прибыль за " + monthNames.monthNames.get(i) + " " + profit);
                     }
                     double midIncome;
                     double income = 0.0;
-                    for (MonthlyReport monthsDatum : monthsData) {
-                        income += monthsDatum.getMaxIncome();
+                    for (int i = 0; i < yearData.items.size()/2; i++) {
+                        income += yearData.getMonthIncome(i*2);
                     }
                     midIncome = income/3;
                     System.out.println("Средний расход за все месяцы в году - " + midIncome);
                     double midExpense;
                     double expense = 0.0;
-                    for (MonthlyReport monthsDatum : monthsData) {
-                        expense += monthsDatum.getMaxExpense();
+                    for (int i = 0; i < yearData.items.size()/2; i++) {
+                        expense += yearData.getMonthExpense(i*2);
                     }
                     midExpense = expense/3;
                     System.out.println("Средний доход за все месяцы в году - " + midExpense);
