@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-
+    static final int YEAR = 2021;
+    static final String ROOT = "resources";
     public static void main(String[] args) {
-        final int YEAR = 2021;
-        final String ROOT = "resources";
         Scanner scanner = new Scanner(System.in);
         ArrayList<MonthlyReport> monthsData = null;
         MonthNames monthNames = new MonthNames();
@@ -34,6 +33,7 @@ public class Main {
                     MonthlyReport s = new MonthlyReport(data);
                         monthsData.add(s);
                 }
+                System.out.println("Команда выполнена успешно");
             }
             else if (userInput == 2) {
                 List<String> data;
@@ -43,6 +43,7 @@ public class Main {
                     throw new RuntimeException(e);
                 }
                 yearData = new YearlyReport(data);
+                System.out.println("Команда выполнена успешно");
             }
             else if (userInput == 3) {
                 if (yearData != null && monthsData != null && !monthsData.isEmpty()) {
@@ -86,17 +87,18 @@ public class Main {
                     }
                     double midIncome;
                     double income = 0.0;
-                    for (int i = 0; i < yearData.items.size()/2; i++) {
+                    int sizeYear = yearData.items.size()/2;
+                    for (int i = 0; i < sizeYear; i++) {
                         income += yearData.getMonthIncome(i*2);
                     }
-                    midIncome = income/3;
+                    midIncome = income/sizeYear;
                     System.out.println("Средний расход за все месяцы в году - " + midIncome);
                     double midExpense;
                     double expense = 0.0;
-                    for (int i = 0; i < yearData.items.size()/2; i++) {
+                    for (int i = 0; i < sizeYear; i++) {
                         expense += yearData.getMonthExpense(i*2);
                     }
-                    midExpense = expense/3;
+                    midExpense = expense/sizeYear;
                     System.out.println("Средний доход за все месяцы в году - " + midExpense);
                 }
                 else {
