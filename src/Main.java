@@ -81,13 +81,13 @@ public class Main {
             else if (userInput == 5) {
                 if (yearData != null) {
                     System.out.println("Рассматриваемый год - " + YEAR);
-                    for (int i = 0; i < yearData.items.size()/2; i++) {
+                    int sizeYear = yearData.items.size()/2;
+                    for (int i = 0; i < sizeYear; i++) {
                         int profit = yearData.getMonthIncome(i*2) - yearData.getMonthExpense(i*2);
                         System.out.println("Прибыль за " + monthNames.monthNames.get(i) + " " + profit);
                     }
                     double midIncome;
                     double income = 0.0;
-                    int sizeYear = yearData.items.size()/2;
                     for (int i = 0; i < sizeYear; i++) {
                         income += yearData.getMonthIncome(i*2);
                     }
